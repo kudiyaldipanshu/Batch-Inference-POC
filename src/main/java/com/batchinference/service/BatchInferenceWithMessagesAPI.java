@@ -17,7 +17,7 @@ public class BatchInferenceWithMessagesAPI {
 
     public String submitJob() {
         return client.createModelInvocationJob(request -> request
-                .modelId(config.modelId())
+                .modelId("global.anthropic.claude-sonnet-4-5-20250929-v1:0")
                 .jobName(config.jobName())
                 .roleArn(config.roleArn())
                 .inputDataConfig(input -> input
@@ -25,7 +25,7 @@ public class BatchInferenceWithMessagesAPI {
                                 .s3Uri("s3://bedrock-surface-batch-inference-bucket/messages-input/")
                                 .s3InputFormat(S3InputFormat.JSONL)))
                 .outputDataConfig(output -> output
-                        .s3OutputDataConfig(s3 -> s3
+                         .s3OutputDataConfig(s3 -> s3
                                 .s3Uri("s3://bedrock-surface-batch-inference-output-bucket/")))
         ).jobArn();
     }
