@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.batchinference</groupId>
+    <artifactId>Batch-Inference</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <!-- Target Java 21 features (e.g. sequenced collections, virtual threads) -->
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Centralises the AWS SDK version for all AWS dependencies below -->
+        <aws.java.sdk.version>2.46.15</aws.java.sdk.version>
+    </properties>
+
+    <!--
+        BOM (Bill of Materials) imports centralise version management so that
+        individual child dependencies below can omit version tags.
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- AWS SDK v2 BOM — controls versions for bedrock, bedrockruntime, sts, signin -->
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>${aws.java.sdk.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <!-- AWS Bedrock: control-plane API for listing models, etc. -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>bedrock</artifactId>
+        </dependency>
+
+        <!-- AWS STS: temporary credential support for cross-account access -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sts</artifactId>
+        </dependency>
+
+        <!-- AWS Bedrock Runtime: data-plane API for invoking LLMs (Converse API) -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>bedrockruntime</artifactId>
+        </dependency>
+
+        <!-- AWS SignIn: enables login_session profile support for SSO-based auth -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>signin</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!--
+        Build configuration: the maven-shade-plugin creates a fat JAR bundling all
+        dependencies, so the application can be run with a single java -jar command.
+    -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Keep the full original POM; do not produce a reduced one -->
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <!-- Entry point for java -jar -->
+                                    <mainClass>com.batchinference.BatchInferenceApplication</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
