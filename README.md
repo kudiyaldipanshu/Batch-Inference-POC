@@ -1,4 +1,4 @@
-# AWS Bedrock Batch Inference - POC Findings
+# AWS Bedrock Batch Inference
 
 ## Overview
 
