@@ -28,7 +28,7 @@ public class BedrockProperties {
         return new BedrockProperties(
                 getEnv("MODEL_ID", "arn:aws:bedrock:us-east-1:856021349133:inference-profile/global.amazon.nova-2-lite-v1:0"),
                 getEnv("ROLE_ARN", "arn:aws:iam::856021349133:role/Bedrock-Batch-Inference-Role"),
-                getEnv("INPUT_S3_URI", "s3://bedrock-surface-batch-inference-bucket/input.jsonl"),
+                getEnv("INPUT_S3_URI", "s3://bedrock-surface-batch-inference-bucket/converse-input/"),
                 getEnv("OUTPUT_S3_URI", "s3://bedrock-surface-batch-inference-output-bucket/"),
                 getEnv("JOB_NAME", "Batch-Inference-" + UUID.randomUUID()),
                 getEnv("AWS_REGION", "us-east-1"),

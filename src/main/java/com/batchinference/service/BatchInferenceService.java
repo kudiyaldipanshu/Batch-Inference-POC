@@ -17,7 +17,7 @@ public class BatchInferenceService {
     public String submitJob(BedrockProperties config) {
         CreateModelInvocationJobResponse response = client.createModelInvocationJob(
                 request -> request
-                        .modelId(config.modelId())
+                        .modelId("arn:aws:bedrock:us-east-1:856021349133:inference-profile/global.amazon.nova-2-lite-v1:0")
                         .jobName(config.jobName())
                         .roleArn(config.roleArn())
                         .inputDataConfig(input -> input
